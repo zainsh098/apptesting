@@ -1,16 +1,16 @@
 
-import 'dart:typed_data';
+
 import 'dart:ui' as ui;
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+
 import 'package:flutter/rendering.dart';
-import 'package:flutter/semantics.dart';
+
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -31,7 +31,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
   String _qrData = '';
   bool _isShowQR = false;
   bool _isSubmitted = false;
-  bool _isPressed = true;
+
 
   String? get _errorMessage {
     String text = _textController.text.trim();
@@ -99,9 +99,9 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height:  height * 0.03,),
-                
-                Text('QR Generator ',style: TextStyle(letterSpacing: 2,wordSpacing:2,fontSize: 22,fontWeight: ui.FontWeight.w400,),),
-                
+
+                const Text('QR Generator ',style: TextStyle(letterSpacing: 2,wordSpacing:2,fontSize: 22,fontWeight: ui.FontWeight.w400,),),
+
 
                 SizedBox(height: height * 0.02,),
                 RepaintBoundary(
@@ -117,121 +117,114 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                 //   ),
                 // ),
                 SizedBox(height: height * 0.03,),
-                Card(
+                Column(
+                  children: [
+                    Card. filled(
+                      elevation: 2,
+                      shadowColor: Colors.blue,
+                      color: Colors.blue.shade50,
 
-                  shape: RoundedRectangleBorder(
 
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withOpacity(
-                              0.2), // Adjust the shadow color and opacity as needed
-                          spreadRadius:3,
-                          blurRadius: 7,
-                          offset: const Offset(2,
-                              4), // Adjust the offset to control the shadow position
+
+
+                      shape: RoundedRectangleBorder(
+
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextFormField(
+
+                        style:  const TextStyle(
+                          fontSize: 20,
+                         letterSpacing: 1,
+                          fontWeight: FontWeight.w400,
+
+
+
+
+
+
                         ),
+                        textAlign: TextAlign.center,
+
+                      cursorColor: Colors.black,
+
+                        keyboardType: TextInputType.text,
+                        controller: _textController,
+                        decoration: InputDecoration(
+
+                          hintTextDirection: TextDirection.ltr,
+
+
+
+                          hintText: 'Enter your content here',
+
+                          hintStyle:   const TextStyle(
+                            height: 3,
+                          color: Colors.grey,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+
+                        ),
+
+
+                               // Use a lighter color for the field background
+                          border: OutlineInputBorder(
+                              // Remove borderSide from here
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none
+                              // Remove this line to remove side border
+                              ),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none),
+                          errorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide.none),
+                          errorText: _isSubmitted ? _errorMessage : null,
+                        ),
+
+                        minLines: 3,
+
+
+                        maxLines: 7,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+
+                        BuildButton(
+                          imageAsset:
+                          'assets/qr-code.png',
+
+                          onPressed: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            setState(() {
+                              _isSubmitted = true;
+                              _qrData = _textController.text.trim();
+                              if (_qrData.isEmpty) {
+                                _isShowQR = false;
+                              } else {
+                                _isShowQR = true;
+                              }
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 6,
+                        ),
+                        BuildButton(
+                            imageAsset: 'assets/arrow.png',
+
+
+                            onPressed: _isShowQR ? _capturePng : null),
                       ],
-                    ),
-                    child: TextFormField(
-
-                      style:  const TextStyle(
-                        fontSize: 20,
-                       letterSpacing: 1,
-                        fontWeight: FontWeight.w400,
-
-
-
-
-
-
-                      ),
-                      textAlign: TextAlign.center,
-
-                    cursorColor: Colors.black,
-
-                      keyboardType: TextInputType.text,
-                      controller: _textController,
-                      decoration: InputDecoration(
-
-                        hintTextDirection: TextDirection.ltr,
-
-
-
-                        hintText: 'Enter your content here',
-
-                        hintStyle:   TextStyle(
-                          height: 3,
-                        color: Colors.grey,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-
-                      ),
-
-                        isDense: true,
-                        filled: true,
-                        fillColor: Colors.white,
-                             // Use a lighter color for the field background
-                        border: OutlineInputBorder(
-                            // Remove borderSide from here
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none
-                            // Remove this line to remove side border
-                            ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none),
-                        errorText: _isSubmitted ? _errorMessage : null,
-                      ),
-
-                      minLines: 3,
-
-
-                      maxLines: 7,
-                    ),
-                  ),
+                    )
+                  ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-  Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-
-      BuildButton(
-      imageAsset:
-      'assets/qr-code.png',
-
-        onPressed: () {
-          FocusManager.instance.primaryFocus?.unfocus();
-          setState(() {
-            _isSubmitted = true;
-            _qrData = _textController.text.trim();
-            if (_qrData.isEmpty) {
-              _isShowQR = false;
-            } else {
-              _isShowQR = true;
-            }
-          });
-        },
-      ),
-      const SizedBox(
-        height: 6,
-      ),
-    BuildButton(
-      imageAsset: 'assets/arrow.png',
 
 
-          onPressed: _isShowQR ? _capturePng : null),
-    ],
-  )
+
               ],
             ),
           ),
@@ -249,9 +242,10 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
     return ClipRRect(
 
       borderRadius: BorderRadius.circular(9),
-      child: Card(
-        elevation: 4,
+      child: Card.filled(
+        elevation: 2,
 
+       color: Colors.amber,
 
        shadowColor: Colors.blue,
 
@@ -269,17 +263,17 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
 
 
               )),
-              color: whiteColor,
+              color: Colors.grey.shade50,
               // gradient:
             ),
             alignment: Alignment.center,
             child: AnimatedCrossFade(
 
 
-              firstChild:  Text('Create your QR code'),
+              firstChild:  const Text('Create your QR code'),
               secondChild: QrImageView(
 
-        dataModuleStyle: QrDataModuleStyle(
+        dataModuleStyle: const QrDataModuleStyle(
           color: Colors.pink,
           dataModuleShape: QrDataModuleShape.circle
 

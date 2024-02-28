@@ -1,6 +1,7 @@
 
 
 import 'package:apptesting/Scan%20Qr%20Code/home_screen.dart';
+import 'package:apptesting/Scan%20Qr%20Code/views/qr_create_screen.dart';
 import 'package:apptesting/Scan%20Qr%20Code/views/qr_scanner_screen.dart';
 import 'package:apptesting/view/qr_openscreen.dart';
 import 'package:apptesting/view/scan_qr.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const QrScannerScreen()
+      home: const HomeScreenQR()
 
     );
   }

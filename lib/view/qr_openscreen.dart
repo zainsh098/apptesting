@@ -1,11 +1,28 @@
-import 'package:apptesting/Scan%20Qr%20Code/views/qr_scanner_screen.dart';
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QrOpenScreen extends StatelessWidget {
   final String scannedData;
   const QrOpenScreen({super.key, required this.scannedData});
+
+
+
+  Future<void> shareText(String test)
+  async {
+
+
+
+    Share.share(test,subject: 'Eke');
+
+
+  }
+
+
+
 
 
   @override
@@ -78,18 +95,22 @@ class QrOpenScreen extends StatelessWidget {
 
                     shadowColor: Colors.grey,
 
-                    margin: EdgeInsets.only(left: 15,right: 15),
-                    // Choose card type: elevated, filled, or outlined
+                    margin: const EdgeInsets.only(left: 15,right: 15),
+
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Container(
+                    child: SizedBox(
                       height:  height* 0.2,
                       width:width * 0.96 ,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(scannedData!),
+                          Text(scannedData, textAlign: TextAlign.center, style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400
+                          )),
+
                         ],
                       ),
                     ),
@@ -102,7 +123,7 @@ class QrOpenScreen extends StatelessWidget {
                     right:20,
                     child:IconButton(onPressed: () {
 
-                    }, icon: Icon(Icons.copy,color: Colors.black,size: 32,)))
+                    }, icon: const Icon(Icons.copy,color: Colors.black,size: 32,)))
 
 
 
@@ -119,14 +140,24 @@ class QrOpenScreen extends StatelessWidget {
 
                     minimumSize: MaterialStatePropertyAll(Size(width * 0.6 , height * 0.07)),
 
-                    backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                    overlayColor: MaterialStatePropertyAll(Colors.green),
-                    elevation: MaterialStatePropertyAll(3),
+                    backgroundColor: const MaterialStatePropertyAll(Colors.blue),
+                    overlayColor: const MaterialStatePropertyAll(Colors.green),
+                    elevation: const MaterialStatePropertyAll(3),
 
                   ),
-                  onPressed: () {
-
-                  }, child: Text('Share ',style: TextStyle(
+                  onPressed: () async {
+                    if (Platform.isAndroid) {
+                      await shareText(scannedData);
+                    } else {
+                      // Handle sharing on other platforms or provide alternative functionality
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Sharing is not supported on this platform.'),
+                        ),
+                      );
+                    }
+                  },
+                   child: const Text('Share ',style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,fontWeight: FontWeight.w500
 
