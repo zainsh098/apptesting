@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,12 +17,23 @@ class QrOpenScreen extends StatelessWidget {
 
 
 
-    Share.share(test,subject: 'Eke');
+    Share.share(test,subject: 'Scaney');
 
 
   }
 
 
+  Future<void> copytoClipboard(String text,BuildContext context) async
+
+  {
+    await Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Copied to Clipboard'))
+    );
+
+
+
+  }
 
 
 
@@ -101,7 +113,7 @@ class QrOpenScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: SizedBox(
-                      height:  height* 0.2,
+                      height:  height * 0.2,
                       width:width * 0.96 ,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -122,6 +134,8 @@ class QrOpenScreen extends StatelessWidget {
                     top: 6,
                     right:20,
                     child:IconButton(onPressed: () {
+
+                      copytoClipboard(scannedData, context);
 
                     }, icon: const Icon(Icons.copy,color: Colors.black,size: 32,)))
 
@@ -151,7 +165,7 @@ class QrOpenScreen extends StatelessWidget {
                     } else {
                       // Handle sharing on other platforms or provide alternative functionality
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Sharing is not supported on this platform.'),
                         ),
                       );

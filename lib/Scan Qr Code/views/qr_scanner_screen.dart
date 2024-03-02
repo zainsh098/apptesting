@@ -3,7 +3,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../view/qr_openscreen.dart';
 
 class QrScannerScreen extends StatefulWidget {
-  const QrScannerScreen({Key? key}) : super(key: key);
+  const QrScannerScreen({super.key});
 
   @override
   State<QrScannerScreen> createState() => _QrScannerScreenState();
@@ -42,6 +42,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 overlayColor: Colors.white.withOpacity(0.7),
                 borderRadius: 20,
                 borderWidth: 20,
+
+
+
+
                 borderLength: 35,
                 borderColor: Colors.blue,
                 cutOutSize: halfHeight * 0.38,
@@ -51,14 +55,18 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
             ), // Conditionally build QRView based on scanning state
           // Flash button
           Positioned(
-            top: 20,
-            right: 20,
-            child: IconButton(
-              icon: Icon(
-                isFlashOn ? Icons.flash_on : Icons.flash_off,
-                color: isFlashOn ? Colors.yellow : Colors.white,
+            top: 100,
+            right: 180,
+            child: Card.filled(
+              color: isFlashOn ? Colors.grey:Colors.blue,
+              child: IconButton(
+                icon: Icon(
+                  size: 30,
+                  isFlashOn ? Icons.flash_on : Icons.flash_off,
+                  color: isFlashOn ? Colors.yellow : Colors.white,
+                ),
+                onPressed: _toggleFlash,
               ),
-              onPressed: _toggleFlash,
             ),
           ),
           // Text display

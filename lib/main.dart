@@ -1,10 +1,8 @@
 
 
 import 'package:apptesting/Scan%20Qr%20Code/home_screen.dart';
-import 'package:apptesting/Scan%20Qr%20Code/views/qr_create_screen.dart';
-import 'package:apptesting/Scan%20Qr%20Code/views/qr_scanner_screen.dart';
-import 'package:apptesting/view/qr_openscreen.dart';
-import 'package:apptesting/view/scan_qr.dart';
+import 'package:apptesting/Scan%20Qr%20Code/views/qr_history.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +16,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Ui',
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter QR',
       theme: ThemeData(
 
 

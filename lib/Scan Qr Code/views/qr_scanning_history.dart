@@ -18,7 +18,8 @@ class _QRHistoryScreenState extends State<QRHistoryScreen> {
     'History Item 2',
     'History Item 3'
   ];
-  List<String> allData = ['All Item 1', 'All Item 2', 'All Item 3'];
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +106,7 @@ class _QRHistoryScreenState extends State<QRHistoryScreen> {
   }
 
   Widget buildBody() {
-    return _selectedIndex == 0 ? buildHistoryList() : buildAllList();
+    return _selectedIndex == 0 ? buildHistoryList() : buildHistoryList();
   }
 
   Widget buildHistoryList() {
@@ -157,29 +158,6 @@ class _QRHistoryScreenState extends State<QRHistoryScreen> {
     );
   }
 
-  Widget buildAllList() {
-    return Column(
-      children: List.generate(
-        allData.length,
-        (index) => Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          // Set the desired space between tiles
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.blue.shade300,
-            ),
-            child: ListTile(
-              shape: const StadiumBorder(),
-              tileColor: Colors.transparent,
-              // Set to transparent to avoid double background
-              title: Text(allData[index]),
-              // Add other relevant content for each item
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+
 }
+

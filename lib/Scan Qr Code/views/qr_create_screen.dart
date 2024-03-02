@@ -3,7 +3,6 @@
 import 'dart:ui' as ui;
 
 import 'package:another_flushbar/flushbar.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
@@ -87,7 +86,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
   @override
   Widget build(BuildContext context) {
     final height=MediaQuery.sizeOf(context).height *1;
-    final width=MediaQuery.sizeOf(context).width *1;
+
     return Scaffold(
       backgroundColor: Colors.white,
      
@@ -109,19 +108,13 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                   key: _globalKey,
                   child: showQRcode(),
                 ),
-                // const Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: Text(
-                //     'Enter your content',
-                //     style: titleStyle,
-                //   ),
-                // ),
+
                 SizedBox(height: height * 0.03,),
                 Column(
                   children: [
                     Card. filled(
                       elevation: 2,
-                      shadowColor: Colors.blue,
+                      shadowColor: Colors.white,
                       color: Colors.blue.shade50,
 
 
@@ -189,6 +182,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                         maxLines: 7,
                       ),
                     ),
+                    SizedBox(height:  height * 0.05,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -243,11 +237,11 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
 
       borderRadius: BorderRadius.circular(9),
       child: Card.filled(
-        elevation: 2,
+        elevation: 1,
 
-       color: Colors.amber,
 
-       shadowColor: Colors.blue,
+
+
 
         child: Container(
             width: width * 0.6,
@@ -257,7 +251,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
 
               borderRadius: BorderRadius.circular(10),
               border: Border.fromBorderSide(BorderSide(
-                color: Colors.white.withOpacity(0.09),
+                color: Colors.blue.withOpacity(0.09),
                 style: BorderStyle.solid,
                  width: 2,
 

@@ -1,4 +1,5 @@
 import 'package:apptesting/Scan%20Qr%20Code/views/qr_create_screen.dart';
+import 'package:apptesting/Scan%20Qr%20Code/views/qr_history.dart';
 import 'package:apptesting/Scan%20Qr%20Code/views/qr_scanner_screen.dart';
 import 'package:apptesting/Scan%20Qr%20Code/views/qr_scanning_history.dart';
 import 'package:flutter/foundation.dart';
@@ -25,8 +26,9 @@ class _HomeScreenState extends State<HomeScreenQR>
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
+    controller?.dispose();
+
 
   }
 
@@ -46,21 +48,29 @@ class _HomeScreenState extends State<HomeScreenQR>
                   color: Colors.blue.withOpacity(0.18), // Set the shadow color
                   spreadRadius: 1,
                   blurRadius: 5,
-                  offset: Offset(0, 6), // changes position of shadow
+                  offset: Offset(0, 7), // changes position of shadow
                 ),
               ],
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: BottomNavigationBar(
+                unselectedFontSize: 30,
+
+
                 backgroundColor: Colors.blueGrey.shade50,
                 selectedItemColor: Colors.blue,
-                enableFeedback: true,
+                unselectedIconTheme: IconThemeData(color: Colors.grey.shade600,
+                fill: 1,
+                  size: 24
+                ),
+
                 unselectedLabelStyle: GoogleFonts.poppins(
+
                   wordSpacing: 2,
                   letterSpacing: 1,
                   fontWeight: FontWeight.w500,
-                  fontSize: height * 0.018,
+                  fontSize: height * 0.015,
                   color: Colors.black,
                 ),
                 iconSize: 25,
@@ -68,7 +78,7 @@ class _HomeScreenState extends State<HomeScreenQR>
                 selectedLabelStyle: GoogleFonts.poppins(
                   wordSpacing: 2,
                   letterSpacing: 1,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: height * 0.018,
                 ),
                 type: BottomNavigationBarType.fixed,
@@ -100,7 +110,7 @@ class _HomeScreenState extends State<HomeScreenQR>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const QRHistoryScreen(),
+                          builder: (context) => const QrHistory()
                         ),
                       );
 
