@@ -1,7 +1,6 @@
 
 
 import 'package:apptesting/Scan%20Qr%20Code/home_screen.dart';
-import 'package:apptesting/Scan%20Qr%20Code/views/qr_history.dart';
 
 import 'package:flutter/material.dart';
 
