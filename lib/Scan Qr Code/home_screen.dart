@@ -2,7 +2,7 @@ import 'package:apptesting/Scan%20Qr%20Code/views/qr_create_screen.dart';
 import 'package:apptesting/Scan%20Qr%20Code/views/qr_history.dart';
 import 'package:apptesting/Scan%20Qr%20Code/views/qr_scanner_screen.dart';
 
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreenQR>
                   color: Colors.blue.withOpacity(0.18), // Set the shadow color
                   spreadRadius: 1,
                   blurRadius: 5,
-                  offset: Offset(0, 7), // changes position of shadow
+                  offset: const Offset(0, 7), // changes position of shadow
                 ),
               ],
             ),

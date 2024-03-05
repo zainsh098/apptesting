@@ -1,3 +1,4 @@
+import 'package:apptesting/Scan%20Qr%20Code/db_history.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../view/qr_openscreen.dart';
@@ -85,7 +86,9 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
       if (!scanHandled) {
         setState(() {
           scannedData = scanData.code;
-        });
+
+          HistoryDatabase(scannedData.toString()).hiveDatabase();      })
+        ;
 
         setState(() {
           isScanning = false; // Pause scanning when QR code is scanned
@@ -98,6 +101,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
   }
 
   Future<void> _navigateToNextScreen() async {
+
+
+
+
     await Navigator.push(
       context,
       MaterialPageRoute(

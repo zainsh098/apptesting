@@ -9,7 +9,7 @@ class BuildButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height=MediaQuery.sizeOf(context).height*1;
-    final width=MediaQuery.sizeOf(context).width*1;
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(

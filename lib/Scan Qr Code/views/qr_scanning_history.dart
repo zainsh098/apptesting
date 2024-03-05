@@ -68,12 +68,12 @@ class _QRHistoryScreenState extends State<QRHistoryScreen> {
               SizedBox(
                 height: height * 0.02,
               ),
-              Container(
+              SizedBox(
                 height: height * 0.80,
                 width: width * 0.85, // Adjust the width as needed
                 child: buildBody(),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 3,
               )
             ],
@@ -87,7 +87,7 @@ class _QRHistoryScreenState extends State<QRHistoryScreen> {
     final isSelected = index == _selectedIndex;
     return ElevatedButton(
       style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(Size(140, 45)),
+        minimumSize: MaterialStateProperty.all(const Size(140, 45)),
         backgroundColor: MaterialStateProperty.all(
           isSelected ? Colors.blue.shade300 : Colors.grey.shade300,
         ),

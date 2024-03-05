@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 
 class QrHistory extends StatefulWidget {
   const QrHistory({Key? key}) : super(key: key);
@@ -10,179 +11,163 @@ class QrHistory extends StatefulWidget {
 }
 
 class _QrHistoryState extends State<QrHistory> {
-  int selectedIndex = 0;
-
-  List<String> staticHistoryData = [
-    'History Item 1',
-    'History Item 2',
-    'History Item 3',
-    'History Item 4',
-    'History Item 5',
-    'History Item 6',
-  ];
-  List<String> staticHistoryData1 = [
-    'History Item 1',
-    'History Item 2',
-    'History Item 3',
-    'History Item 4',
-    'History Item 5',
-    'History Item 6',
-    'History Item 7',
-    'History Item 8',
-    'History Item 9',
-    'History Item 10',
-    'History Item 11',
-    'History Item 12',
-  ];
-
-  void setSelectedIndex(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    // Set system overlay style
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.blue, // Set status bar color to match app's blue color
+      statusBarIconBrightness: Brightness.light, // Set status bar text color to light
+    ));
+
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-
-
-           backgroundColor: Colors.blue,
-      title: Padding(
-        padding: const EdgeInsets.only(right: 5),
-        child: Text('Scanning History',
-            style: GoogleFonts.poppins(
-                wordSpacing: 2,
-                letterSpacing: 1,
-                fontWeight: FontWeight.w600,
-                fontSize: height * 0.035,
-                color: Colors.white)),
-      ),
-
-
-
-
-            snap: true,
-            floating: true,
-
-
-
-
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-
-
-
-
-            expandedHeight: height * 0.1,
-
-
-
-          ),
-
-          SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height:  height * 0.15,),
-
-                ElevatedButton(
-                  style: ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(Size(140, 45)),
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                      if (selectedIndex == 0) {
-                        return Colors.blue;
-                      }
-                      return Colors.grey;
-                    }),
-                  ),
-                  onPressed: () {
-                    setSelectedIndex(0);
-                  },
-                  child: Text(
-                    'History',
-                    style: GoogleFonts.poppins(
-                        wordSpacing: 2,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                        color: Colors.white),
-                  ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.blue, // Updated to Material Design 3 blue color
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
                 ),
-                SizedBox(width:width * 0.08),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    minimumSize: MaterialStateProperty.all(Size(140, 45)),
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                      if (selectedIndex == 1) {
-                        return Colors.blue;
-                      }
-                      return Colors.grey;
-                    }),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
                   ),
-                  onPressed: () {
-                    setSelectedIndex(1);
-                  },
-                  child: Text(
-                    'All',
-                    style: GoogleFonts.poppins(
-                        wordSpacing: 2,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                        color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-
-          ),
-
-
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.only(left: 10,right: 10),
-                  child: Card.filled(
-
-
-
-                    shadowColor: Colors.amber,
-                    elevation: 5,
-
-                    color: selectedIndex == 0 ? Colors.blueGrey : Colors.blue,
-                    child: ListTile(
-
-                      leading: const Icon(
-                        Icons.qr_code_2,
-                        color: Colors.white,
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        color: Colors.white,
-                      ),
-                      title: Text(
-                        selectedIndex == 0 ? staticHistoryData[index] : staticHistoryData1[index],
-                        style: GoogleFonts.poppins(
-                            wordSpacing: 2,
-                            letterSpacing: 1,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white),
-                      ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Scanning History',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: height * 0.04,
+                      color: Colors.white, // Updated text color to white
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                );
-              },
-              childCount: selectedIndex == 0 ? staticHistoryData.length : staticHistoryData1.length,
+                  SizedBox(height: height * 0.02),
+                ],
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: height * 0.02),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(top: 10),
+
+
+
+                margin: EdgeInsets.symmetric(horizontal: width * 0.04),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+
+                color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: FutureBuilder(
+                  future: Hive.openBox('DB-QR'),
+                  builder: (context, AsyncSnapshot<Box<dynamic>> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (!snapshot.hasData || snapshot.data == null) {
+                        return const Center(
+                          child: Text(
+                            'No data available.',
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                          ),
+                        );
+                      }
+
+                      var box = Hive.box('DB-QR');
+                      List<String> qrData =
+                      box.values.map((item) => item.toString()).toList().reversed.toList();
+
+
+
+                      return ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        itemCount: qrData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final String qrText = qrData[index];
+                          return Dismissible(
+                            key: Key(qrText),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.only(right: 20),
+                              child: const Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onDismissed: (direction) {
+                              box.deleteAt(index);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                elevation: 0,
+                                color: Colors.blue.shade50, // Updated to Material Design 3 blue shade
+                                child: ListTile(
+                                  leading: const Icon(
+                                    Icons.qr_code_2,
+                                    color: Colors.blue, // Updated to Material Design 3 blue color
+                                  ),
+                                  trailing: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.blue, // Updated to Material Design 3 blue color
+                                  ),
+                                  title: Text(
+                                    qrText,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.blue, // Updated to Material Design 3 blue color
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
