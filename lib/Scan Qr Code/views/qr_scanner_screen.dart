@@ -1,7 +1,7 @@
 import 'package:apptesting/Scan%20Qr%20Code/db_history.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import '../../view/qr_openscreen.dart';
+import 'qr_openscreen.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});

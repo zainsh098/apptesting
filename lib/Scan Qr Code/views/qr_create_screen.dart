@@ -51,7 +51,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Download successful'),
         backgroundColor: Colors.green,
       ),
@@ -73,7 +73,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: height * 0.03),
-                Text(
+                const Text(
                   'QR Generator',
                   style: TextStyle(
                     letterSpacing: 2,
@@ -96,7 +96,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: TextFormField(
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       letterSpacing: 1,
                       fontWeight: FontWeight.w400,
@@ -107,7 +107,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                     controller: _textController,
                     decoration: InputDecoration(
                       hintText: 'Enter your content here',
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         color: Colors.grey,
                         fontSize: 20,
                         fontWeight: FontWeight.w400,
@@ -115,7 +115,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(
+                      contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 15,
                       ),
@@ -130,7 +130,7 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton.icon(
-                      style: ButtonStyle(
+                      style: const ButtonStyle(
 
 
                           backgroundColor: MaterialStatePropertyAll(Colors.blue)),
@@ -145,8 +145,8 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                           }
                         });
                       },
-                      icon: Icon(Icons.qr_code,color: Colors.white,),
-                      label: Text('Generate QR',style: TextStyle(color: Colors.white),),
+                      icon: const Icon(Icons.qr_code,color: Colors.white,),
+                      label: const Text('Generate QR',style: TextStyle(color: Colors.white),),
 
                     ),
                     ElevatedButton.icon(
@@ -155,8 +155,8 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
 
                           backgroundColor: MaterialStatePropertyAll(_isShowQR?Colors.green:Colors.grey)),
                       onPressed: _isShowQR ? _capturePng : null,
-                      icon: Icon(Icons.download,color: Colors.white,),
-                      label: Text('Save QR',style: TextStyle(color: Colors.white)),
+                      icon: const Icon(Icons.download,color: Colors.white,),
+                      label: const Text('Save QR',style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -184,17 +184,31 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
         ),
         alignment: Alignment.center,
         child: AnimatedCrossFade(
-          firstChild: Text('Create your QR code'),
+          firstChild: const Text('Create your QR code'),
           secondChild: QrImageView(
+            eyeStyle: QrEyeStyle(  color: Colors.blue,
+
+            eyeShape:QrEyeShape.square
+            ),
+            dataModuleStyle:  QrDataModuleStyle(
+
+              color: Colors.pink,
+              dataModuleShape: QrDataModuleShape.circle
+
+            ),
+
+
             data: _qrData,
+
+
             version: QrVersions.auto,
             size: 200,
-            errorStateBuilder: (context, error) => Text(
+            errorStateBuilder: (context, error) => const Text(
               'Uh oh! Something went wrong...',
               textAlign: TextAlign.center,
             ),
           ),
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           crossFadeState: _isShowQR
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,

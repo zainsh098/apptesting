@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class QrHistory extends StatefulWidget {
   const QrHistory({Key? key}) : super(key: key);
@@ -65,14 +65,12 @@ class _QrHistoryState extends State<QrHistory> {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.only(top: 10),
-
-
-
                 margin: EdgeInsets.symmetric(horizontal: width * 0.04),
                 decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
-
-                color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                  color: Colors.white,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.blue.withOpacity(0.2),
@@ -90,22 +88,22 @@ class _QrHistoryState extends State<QrHistory> {
                         return const Center(
                           child: Text(
                             'No data available.',
-                            style: TextStyle(fontSize: 18, color: Colors.black),
+                            style:
+                            TextStyle(fontSize: 18, color: Colors.black),
                           ),
                         );
                       }
 
                       var box = Hive.box('DB-QR');
-                      List<String> qrData =
-                      box.values.map((item) => item.toString()).toList().reversed.toList();
+                      List<String> qrData = box.values
+                          .map((item) => item.toString())
+                          .toList();
 
-
-
-                      return ListView.builder(
+                      return  ListView.builder(
                         padding: const EdgeInsets.only(bottom: 5),
                         itemCount: qrData.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final String qrText = qrData[index];
+                          final String qrText = qrData[qrData.length - 1 - index]; // Reversed order
                           return Dismissible(
                             key: Key(qrText),
                             direction: DismissDirection.endToStart,
@@ -119,32 +117,50 @@ class _QrHistoryState extends State<QrHistory> {
                               ),
                             ),
                             onDismissed: (direction) {
-                              box.deleteAt(index);
+                              setState(() {
+                                box.deleteAt(qrData.length - 1 - index); // Reversed order
+                              });
+                              Flushbar(
+                                flushbarPosition: FlushbarPosition.BOTTOM,
+                                backgroundColor: Colors.green,
+                                message: 'Deleted',
+                                duration: const Duration(seconds: 2),
+                              ).show(context);
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                elevation: 0,
-                                color: Colors.blue.shade50, // Updated to Material Design 3 blue shade
-                                child: ListTile(
-                                  leading: const Icon(
-                                    Icons.qr_code_2,
-                                    color: Colors.blue, // Updated to Material Design 3 blue color
+                            child: GestureDetector(
+                              onTap: () {
+                                Clipboard.setData(
+                                    ClipboardData(text: qrText));
+                                Flushbar(
+                                  message: 'Text copied: $qrText',
+                                  duration: const Duration(seconds: 2),
+                                ).show(context);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
-                                  trailing: const Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Colors.blue, // Updated to Material Design 3 blue color
-                                  ),
-                                  title: Text(
-                                    qrText,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      color: Colors.black,
+                                  elevation: 0,
+                                  color: Colors.blue.shade50,
+                                  child: ListTile(
+                                    leading: const Icon(
+                                      Icons.qr_code_2,
+                                      color: Colors.blue,
+                                    ),
+                                    trailing: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.blue,
+                                    ),
+                                    title: Text(
+                                      qrText,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -153,11 +169,12 @@ class _QrHistoryState extends State<QrHistory> {
                           );
                         },
                       );
+                      // Reverse the list for display
                     } else {
                       return const Center(
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.blue, // Updated to Material Design 3 blue color
+                            Colors.blue,
                           ),
                         ),
                       );
