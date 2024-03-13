@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,37 +9,21 @@ class QrOpenScreen extends StatelessWidget {
   final String scannedData;
   const QrOpenScreen({super.key, required this.scannedData});
 
-
-
-  Future<void> shareText(String test)
-  async {
-
-
-
-    Share.share(test,subject: 'Scaney');
-
-
+  Future<void> shareText(String test) async {
+    Share.share(test, subject: 'Scaney');
   }
 
-
-  Future<void> copytoClipboard(String text,BuildContext context) async
-
-  {
+  Future<void> copytoClipboard(String text, BuildContext context) async {
     await Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Copied to Clipboard'))
-    );
-
-
-
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Copied to Clipboard')));
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.sizeOf(context).height * 1;
     final width = MediaQuery.sizeOf(context).width * 1;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -69,11 +52,21 @@ class QrOpenScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontSize: height * 0.022,
                         color: Colors.black)),
+
               ],
             ),
-            SizedBox(height:  height * 0.05,),
-            Center(child: Image.asset('assets/correct.png',fit:BoxFit.cover,height: height * 0.13,)),
-            SizedBox(height: height * 0.02,),
+            SizedBox(
+              height: height * 0.05,
+            ),
+            Center(
+                child: Image.asset(
+              'assets/correct.png',
+              fit: BoxFit.cover,
+              height: height * 0.13,
+            )),
+            SizedBox(
+              height: height * 0.02,
+            ),
             Center(
               child: Text('Scanning successful',
                   style: GoogleFonts.poppins(
@@ -83,8 +76,9 @@ class QrOpenScreen extends StatelessWidget {
                       fontSize: height * 0.022,
                       color: Colors.black)),
             ),
-            SizedBox(height:  height * 0.05,),
-
+            SizedBox(
+              height: height * 0.05,
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text('Scanned QR Code',
@@ -95,69 +89,62 @@ class QrOpenScreen extends StatelessWidget {
                       fontSize: height * 0.021,
                       color: Colors.black)),
             ),
-            SizedBox(height:  height * 0.03,),
-
+            SizedBox(
+              height: height * 0.03,
+            ),
             Stack(
               children: [
-
                 Center(
                   child: Card.filled(
                     elevation: 5,
                     color: Colors.blue.shade50.withOpacity(0.9),
-
                     shadowColor: Colors.grey,
-
-                    margin: const EdgeInsets.only(left: 15,right: 15),
-
+                    margin: const EdgeInsets.only(left: 15, right: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: SizedBox(
-                      height:  height * 0.2,
-                      width:width * 0.96 ,
+                      height: height * 0.2,
+                      width: width * 0.96,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(scannedData, textAlign: TextAlign.center, style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400
-                          )),
-
+                          Text(scannedData,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400)),
                         ],
                       ),
                     ),
-
                   ),
                 ),
-
                 Positioned(
                     top: 6,
-                    right:20,
-                    child:IconButton(onPressed: () {
-
-                      copytoClipboard(scannedData, context);
-
-                    }, icon: const Icon(Icons.copy,color: Colors.black,size: 32,)))
-
-
-
+                    right: 20,
+                    child: IconButton(
+                        onPressed: () {
+                          copytoClipboard(scannedData, context);
+                        },
+                        icon: const Icon(
+                          Icons.copy,
+                          color: Colors.black,
+                          size: 32,
+                        )))
               ],
-
-
             ),
-
-            SizedBox(height:  height* 0.07,),
+            SizedBox(
+              height: height * 0.07,
+            ),
             Center(
               child: ElevatedButton(
-
                   style: ButtonStyle(
-
-                    minimumSize: MaterialStatePropertyAll(Size(width * 0.6 , height * 0.07)),
-
-                    backgroundColor: const MaterialStatePropertyAll(Colors.blue),
+                    minimumSize: MaterialStatePropertyAll(
+                        Size(width * 0.6, height * 0.07)),
+                    backgroundColor:
+                        const MaterialStatePropertyAll(Colors.blue),
                     overlayColor: const MaterialStatePropertyAll(Colors.green),
                     elevation: const MaterialStatePropertyAll(3),
-
                   ),
                   onPressed: () async {
                     if (Platform.isAndroid) {
@@ -166,22 +153,20 @@ class QrOpenScreen extends StatelessWidget {
                       // Handle sharing on other platforms or provide alternative functionality
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Sharing is not supported on this platform.'),
+                          content: Text(
+                              'Sharing is not supported on this platform.'),
                         ),
                       );
                     }
                   },
-                   child: const Text('Share ',style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,fontWeight: FontWeight.w500
-
-
-              ),)),
+                  child: const Text(
+                    'Share ',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500),
+                  )),
             ),
-
-
-
-
           ],
         ),
       ),
