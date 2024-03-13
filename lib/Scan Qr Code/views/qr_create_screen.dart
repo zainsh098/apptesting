@@ -1,10 +1,13 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:apptesting/QR%20Provider/qr_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class CreateQRScreen extends StatefulWidget {
@@ -17,9 +20,7 @@ class CreateQRScreen extends StatefulWidget {
 class _CreateQRScreenState extends State<CreateQRScreen> {
   final GlobalKey _globalKey = GlobalKey();
   final TextEditingController _textController = TextEditingController();
-  String _qrData = '';
-  bool _isShowQR = false;
-  bool _isSubmitted = false;
+
 
   String? get _errorMessage {
     String text = _textController.text.trim();
@@ -39,7 +40,6 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-    // Request permissions if not already granted
     if (!(await Permission.storage.status.isGranted)) {
       await Permission.storage.request();
     }
@@ -62,7 +62,6 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -95,69 +94,81 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: TextFormField(
-                    style: const TextStyle(
-                      fontSize: 20,
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    textAlign: TextAlign.center,
-                    cursorColor: Colors.black,
-                    keyboardType: TextInputType.text,
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your content here',
-                      hintStyle: const TextStyle(
-                        color: Colors.grey,
+                  child: Consumer<QrHomeProvider>(builder: (context, value, child) {
+                    return TextFormField(
+                      style: const TextStyle(
                         fontSize: 20,
+                        letterSpacing: 1,
                         fontWeight: FontWeight.w400,
                       ),
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 15,
+                      textAlign: TextAlign.center,
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      controller: _textController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your content here',
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
+                        errorText: value.isSubmitted ? _errorMessage : null,
                       ),
-                      errorText: _isSubmitted ? _errorMessage : null,
-                    ),
-                    minLines: 3,
-                    maxLines: 7,
-                  ),
+                      minLines: 3,
+                      maxLines: 7,
+                    );
+                  },)
                 ),
                 SizedBox(height: height * 0.05),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ElevatedButton.icon(
-                      style: const ButtonStyle(
+                    Consumer<QrHomeProvider>(builder: (context, value, child) {
+                      return ElevatedButton.icon(
+                        style: const ButtonStyle(
 
 
-                          backgroundColor: MaterialStatePropertyAll(Colors.blue)),
-                      onPressed: () {
-                        setState(() {
-                          _isSubmitted = true;
-                          _qrData = _textController.text.trim();
-                          if (_qrData.isEmpty) {
-                            _isShowQR = false;
+                            backgroundColor: MaterialStatePropertyAll(Colors.blue)),
+                        onPressed: () {
+
+                          value.submit(true);
+
+                          value.showQrData(_textController.text.trim());
+                          if (value.qrData.isEmpty) {
+                            value.showQr(false);
                           } else {
-                            _isShowQR = true;
+                            value.showQr(true);
                           }
-                        });
-                      },
-                      icon: const Icon(Icons.qr_code,color: Colors.white,),
-                      label: const Text('Generate QR',style: TextStyle(color: Colors.white),),
-
-                    ),
-                    ElevatedButton.icon(
-                      style: ButtonStyle(
+                          value.submit(true);
 
 
-                          backgroundColor: MaterialStatePropertyAll(_isShowQR?Colors.green:Colors.grey)),
-                      onPressed: _isShowQR ? _capturePng : null,
-                      icon: const Icon(Icons.download,color: Colors.white,),
-                      label: const Text('Save QR',style: TextStyle(color: Colors.white)),
-                    ),
+
+                        },
+                        icon: const Icon(Icons.qr_code,color: Colors.white,),
+                        label: const Text('Generate QR',style: TextStyle(color: Colors.white),),
+
+                      );
+                    },),
+                    Consumer<QrHomeProvider>(builder: (context, value, child) {
+
+
+                      return ElevatedButton.icon(
+                        style: ButtonStyle(
+
+
+                            backgroundColor: MaterialStatePropertyAll(value.isShowQR?Colors.green:Colors.grey)),
+                        onPressed: value.isShowQR ? _capturePng : null,
+                        icon: const Icon(Icons.download,color: Colors.white,),
+                        label: const Text('Save QR',style: TextStyle(color: Colors.white)),
+                      );
+                    },)
                   ],
                 ),
               ],
@@ -183,36 +194,39 @@ class _CreateQRScreenState extends State<CreateQRScreen> {
           color: Colors.grey.shade50,
         ),
         alignment: Alignment.center,
-        child: AnimatedCrossFade(
-          firstChild: const Text('Create your QR code'),
-          secondChild: QrImageView(
-            eyeStyle: QrEyeStyle(  color: Colors.blue,
+        child: Consumer<QrHomeProvider>(builder: (context, value, child) {
+          return AnimatedCrossFade(
+            firstChild: const Text('Create your QR code'),
+            secondChild: QrImageView(
+              eyeStyle: const QrEyeStyle(  color: Colors.blue,
 
-            eyeShape:QrEyeShape.square
+                  eyeShape:QrEyeShape.square
+              ),
+              dataModuleStyle:  const QrDataModuleStyle(
+
+                  color: Colors.pink,
+                  dataModuleShape: QrDataModuleShape.circle
+
+              ),
+
+
+              data:value.qrData,
+
+
+              version: QrVersions.auto,
+              size: 200,
+              errorStateBuilder: (context, error) => const Text(
+                'Uh oh! Something went wrong...',
+                textAlign: TextAlign.center,
+              ),
             ),
-            dataModuleStyle:  QrDataModuleStyle(
+            duration: const Duration(milliseconds: 300),
+            crossFadeState: value.isShowQR
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+          );
 
-              color: Colors.pink,
-              dataModuleShape: QrDataModuleShape.circle
-
-            ),
-
-
-            data: _qrData,
-
-
-            version: QrVersions.auto,
-            size: 200,
-            errorStateBuilder: (context, error) => const Text(
-              'Uh oh! Something went wrong...',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          duration: const Duration(milliseconds: 300),
-          crossFadeState: _isShowQR
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-        ),
+        },)
       ),
     );
   }
